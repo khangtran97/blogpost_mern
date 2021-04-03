@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import postRoutes from './routes/posts.js';
 import userRoutes from './routes/users.js';
+import tagRoutes from './routes/tags.js'
 
 const app = express();
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 app.use('/posts', postRoutes);
 app.use('/user', userRoutes);
+app.use('/tag', tagRoutes)
 
 const CONNECTION_URL =
   'mongodb+srv://khangtdk:khangki9999@cluster0.8f4qo.mongodb.net/react-mern?retryWrites=true&w=majority';
