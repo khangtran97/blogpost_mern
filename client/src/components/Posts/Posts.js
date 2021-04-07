@@ -25,7 +25,9 @@ const Posts = ({ setCurrentId }) => {
   //     ))}
   //   </Grid>
   // );
-  return !posts.length ? (<Loading />) : (
+  return !posts.length ? (
+    <Loading />
+  ) : (
     <Grid
       className={classes.container}
       container
@@ -33,12 +35,12 @@ const Posts = ({ setCurrentId }) => {
       spacing={3}
     >
       {posts.map((post) => (
-        <Grid key={post._id} item xs={12} sm={6} md={6}>
+        <Grid key={post._id} item xs={12} sm={12} md={12}>
           <Post post={post} setCurrentId={setCurrentId} />
         </Grid>
       ))}
     </Grid>
-  )
+  );
 };
 
 export default Posts;

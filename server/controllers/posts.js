@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import PostMessage from '../models/postMessage.js';
+import Tag from '../models/tag.js';
+// import { createTag } from '../controllers/tag.js';
 
 export const getPosts = async (req, res) => {
   try {
@@ -11,10 +13,41 @@ export const getPosts = async (req, res) => {
   }
 };
 
+const createTag = (newPost) => {
+  const { tags, _id } = newPost;
+
+  tags.forEach(async (tag, index) => {
+    try {
+      const newPostId = _id;
+      const isTagExist = await Tag.findOne({ name: tag });
+
+      if (isTagExist) {
+        const { posts, _id: existedTagId } = isTagExist;
+
+        const newTag = {
+          ...isTagExist._doc,
+          posts: [...posts, newPostId.toString()],
+        };
+        await Tag.findByIdAndUpdate(existedTagId, newTag, {
+          new: true,
+        })
+          .then((result) => console.log('result', result))
+          .catch((error) => console.log('error', error));
+      } else {
+        const result = await Tag.create({
+          name: tag,
+          posts: _id,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+
 export const createPost = async (req, res) => {
   const post = req.body;
 
-  debugger;
   const newPostMessage = new PostMessage({
     ...post,
     creator: req.userId,
@@ -23,6 +56,8 @@ export const createPost = async (req, res) => {
 
   try {
     await newPostMessage.save();
+
+    createTag(newPostMessage);
 
     res.status(201).json(newPostMessage);
   } catch (error) {
@@ -35,14 +70,13 @@ export const updatePost = async (req, res) => {
   const post = req.body;
   console.log(post);
 
-  if (!mongoose.Types.ObjectId.isValid(_id))
+  if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send(`No post with that ${id}`);
 
-  const updatedPost = await PostMessage.findByIdAndUpdate(
-    id,
-    { ...post, _id },
-    { new: true }
-  );
+  const newpost = { ...post, id };
+  const updatedPost = await PostMessage.findByIdAndUpdate(id, newpost, {
+    new: true,
+  });
 
   res.json(updatedPost);
 };
