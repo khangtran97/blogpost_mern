@@ -6,6 +6,9 @@ import {
   CardMedia,
   Button,
   Typography,
+  CardHeader,
+  Avatar,
+  IconButton,
 } from '@material-ui/core';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
@@ -53,6 +56,33 @@ const Post = ({ post, setCurrentId }) => {
 
   return (
     <Card className={classes.card}>
+      <CardHeader
+        avatar={
+          <Avatar
+            aria-label="recipe"
+            alt={user?.result?.name}
+            src={user?.result?.imageUrl}>
+          </Avatar>
+        }
+        action={
+          (user?.result.googleId === post.creator ||
+            user?.result._id === post.creator) && (
+            <div className={classes.overlay2}>
+              <Button
+                style={{ color: 'white' }}
+                size="small"
+                onClick={() => setCurrentId(post._id)}
+              >
+                <MoreHorizIcon fontSize="default" />
+              </Button>
+            </div>
+          )
+        }
+        title={post.name}
+        subheader={<Typography variant="body2">
+          {moment(post.createdAt).fromNow()}
+        </Typography>}
+      />
       <CardMedia
         className={classes.media}
         image={
@@ -61,24 +91,13 @@ const Post = ({ post, setCurrentId }) => {
         }
         title={post.title}
       />
-      <div className={classes.overlay}>
+      {/* <div className={classes.overlay}>
         <Typography variant="h6">{post.name}</Typography>
         <Typography variant="body2">
           {moment(post.createdAt).fromNow()}
         </Typography>
-      </div>
-      {(user?.result.googleId === post.creator ||
-        user?.result._id === post.creator) && (
-          <div className={classes.overlay2}>
-            <Button
-              style={{ color: 'white' }}
-              size="small"
-              onClick={() => setCurrentId(post._id)}
-            >
-              <MoreHorizIcon fontSize="default" />
-            </Button>
-          </div>
-        )}
+      </div> */}
+
       <div className={classes.details}>
         <Typography variant="body2" color="textSecondary" component="h2">
           {post.tags.map((tag) => `#${tag} `)}

@@ -11,7 +11,7 @@ const App = () => {
   return (
     <div>
       <BrowserRouter>
-        <Container maxWidth="lg">
+        <Container maxWidth="false">
           <Navbar />
           <Switch>
             <Route path="/" exact component={Home} />
@@ -19,7 +19,7 @@ const App = () => {
           </Switch>
         </Container>
       </BrowserRouter>
-    </div>
+    </div >
   );
 };
 
